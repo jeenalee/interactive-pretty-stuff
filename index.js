@@ -31,6 +31,8 @@ class Circle {
         this.path.arc(x, y, radius, 0, Math.PI*2, true);
         this.color = color;
         this.createdAt = now;
+        // we need `now` because we're going to use it for calculating
+        // lifetime.
         this.lifetime = lifetime;
     }
 
@@ -46,20 +48,22 @@ class Circle {
     }
 }
 
-let isMouseDown = null;
+let mouseDownAt = null;
 
 canvas.addEventListener("mousedown", function(event) {
-    isMouseDown = true;
+    mouseDownAt = performance.now();
 });
 
 canvas.addEventListener("mouseup", function(event) {
-    isMouseDown = false;
+    mouseDownAt = null;
 });
 
 canvas.addEventListener("mousemove", function(event) {
-    if (isMouseDown) {
+    if (mouseDownAt != null) {
+        const now = performance.now();
+        const radius = (now - mouseDownAt) / 100;
         world.push(
-            new Circle(event.pageX, event.pageY, getRandomColor(), 10, performance.now(), 500)
+            new Circle(event.pageX, event.pageY, getRandomColor(), radius, now, 500)
         );
     }
 });
