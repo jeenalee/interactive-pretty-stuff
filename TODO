@@ -1,0 +1,9 @@
+1. make the circles shrink as they fade out.
+2. hook into web audio
+   - change the circle color depending on the audio
+3. other types of shapes!
+4. make shapes float away and wiggle
+5. do the "spray paint"
+   - draw splatters around the circle
+6. HARD? add dripping effect (single color)
+7. instead of changing colors randomly, print the spectrum of colors. like slinkies.
