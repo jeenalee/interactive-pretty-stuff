@@ -1,5 +1,5 @@
-const height = window.innerHeight;
-const width = window.innerWidth;
+const height = window.clientWidth * window.devicePixelRatio;
+const width = window.clientHeight * window.devicePixelRatio;
 
 const canvas = document.getElementById("canvas");
 // Look up const if you need.
@@ -50,13 +50,17 @@ class Circle {
 
 let mouseDownAt = null;
 
-canvas.addEventListener("mousedown", function(event) {
-    mouseDownAt = performance.now();
-});
+function start() {
+  mouseDownAt = performance.now();
+}
+canvas.addEventListener("mousedown", start);
+canvas.addEventListener("touchstart", start);
 
-canvas.addEventListener("mouseup", function(event) {
-    mouseDownAt = null;
-});
+function end() {
+  mouseDownAt = null;
+}
+canvas.addEventListener("mouseup", end);
+canvas.addEventListener("touchend", end);
 
 canvas.addEventListener("mousemove", function(event) {
     if (mouseDownAt != null) {
@@ -66,6 +70,22 @@ canvas.addEventListener("mousemove", function(event) {
             new Circle(event.pageX, event.pageY, getRandomColor(), radius, now, 500)
         );
     }
+});
+
+canvas.addEventListener("touchmove", function(event) {
+  const touches = Array.from(event.changedTouches);
+  const now = performance.now();
+  const radius = (now - mouseDownAt) / 100;
+  for (var i = 0; i < touches.length; i++) {
+    world.push(
+      new Circle(touches[i].pageX * window.devicePixelRatio,
+                 touches[i].pageY * window.devicePixelRatio,
+                 getRandomColor(),
+                 radius,
+                 now,
+                 500)
+    );
+  }
 });
 
 world.push(
